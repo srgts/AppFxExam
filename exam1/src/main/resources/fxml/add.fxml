@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<HBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sample.controllers.AddDialogController">
+   <children>
+      <VBox prefHeight="400.0" prefWidth="154.0">
+         <children>
+            <AnchorPane prefHeight="468.0" prefWidth="158.0">
+               <children>
+                  <Label text="Дата и время:" AnchorPane.bottomAnchor="35.0" />
+                  <TextField editable="false" prefHeight="30.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" />
+                  <Label text="Введите текст заметки:" AnchorPane.topAnchor="5.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+      <TextArea prefHeight="400.0" prefWidth="332.0" wrapText="true" />
+      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="95.0" text="Сохранить">
+         <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </HBox.margin>
+      </Button>
+   </children>
+</HBox>
