@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+
 <HBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sample.controllers.AddDialogController">
    <children>
       <VBox prefHeight="400.0" prefWidth="154.0">
@@ -16,11 +19,20 @@
             </AnchorPane>
          </children>
       </VBox>
-      <TextArea prefHeight="400.0" prefWidth="332.0" wrapText="true" />
-      <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="95.0" text="Сохранить">
-         <HBox.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </HBox.margin>
-      </Button>
+      <TextArea prefHeight="400.0" prefWidth="335.0" wrapText="true" />
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="95.0" text="Сохранить">
+               <VBox.margin>
+                  <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="95.0" text="Отмена">
+               <VBox.margin>
+                  <Insets left="5.0" right="5.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
    </children>
 </HBox>
