@@ -8,6 +8,8 @@ public class Note {
     private Date date;
     private String text;
 
+    public Note(){}
+
     public Note(int number, Date date, String text) {
         this.number = number;
         this.date = date;

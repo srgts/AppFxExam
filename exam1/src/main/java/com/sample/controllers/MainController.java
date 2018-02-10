@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainController {
+
     public void showDialog(ActionEvent actionEvent) {
         try {
             Stage stage = new Stage();
