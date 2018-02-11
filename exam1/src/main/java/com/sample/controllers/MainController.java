@@ -1,11 +1,16 @@
 package com.sample.controllers;
 
 import com.sample.interfaces.impls.DBNotesTable;
+import com.sample.objects.Note;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -15,7 +20,30 @@ public class MainController {
 
     private DBNotesTable db = new DBNotesTable();
 
+    @FXML
+    private TableView tableNotesTable;
 
+    @FXML
+    private TableColumn <Note, String> columnNumber;
+
+    @FXML
+    private TableColumn <Note, String> columnDate;
+
+    @FXML
+    private TableColumn <Note, String> columnText;
+
+//    private AddDialogController addDialogController;
+
+    @FXML
+    private void initialize(){
+        columnNumber.setCellValueFactory(new PropertyValueFactory<Note, String>("number"));
+        columnDate.setCellValueFactory(new PropertyValueFactory<Note, String>("date"));
+        columnText.setCellValueFactory(new PropertyValueFactory<Note, String>("text"));
+
+        db.getUpdateTable();
+        tableNotesTable.setItems(db.getNotes());
+
+    }
 
     public void showDialog(ActionEvent actionEvent) {
         try {
