@@ -1,5 +1,6 @@
 package com.sample.controllers;
 
+import com.sample.interfaces.impls.DBNotesTable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -11,6 +12,10 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainController {
+
+    private DBNotesTable db = new DBNotesTable();
+
+
 
     public void showDialog(ActionEvent actionEvent) {
         try {

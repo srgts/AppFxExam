@@ -1,27 +1,33 @@
 package com.sample.objects;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Note {
 
-    private int number;
+    private SimpleIntegerProperty number;
     private Date date;
-    private String text;
+    private SimpleStringProperty text = new SimpleStringProperty("");
 
-    public Note(){}
+    public Note() {
+    }
 
     public Note(int number, Date date, String text) {
-        this.number = number;
+        this.number = new SimpleIntegerProperty(number);
         this.date = date;
-        this.text = text;
+        this.text = new SimpleStringProperty(text);
     }
 
     public int getNumber() {
-        return number;
+        return number.get();
     }
 
     public void setNumber(int number) {
-        this.number = number;
+        this.number.set(number);
     }
 
     public Date getDate() {
@@ -33,10 +39,23 @@ public class Note {
     }
 
     public String getText() {
-        return text;
+        return text.get();
     }
 
     public void setText(String text) {
-        this.text = text;
+        this.text.set(text);
+    }
+
+    public SimpleIntegerProperty numberProperty(){
+        return number;
+    }
+
+    public SimpleStringProperty textProperty(){
+        return text;
+    }
+
+    public SimpleStringProperty dateProperty(){
+        DateFormat df = new SimpleDateFormat("dd:MM:yyyy HH:mm:ss");
+        return new SimpleStringProperty(df.format(date));
     }
 }

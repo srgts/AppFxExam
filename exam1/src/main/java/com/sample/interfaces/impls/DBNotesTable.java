@@ -8,11 +8,12 @@ import javafx.collections.ObservableList;
 import java.sql.*;
 
 public class DBNotesTable implements NotesTable {
-    private static Connection conn = null;
-    private static Statement st = null;
-    private static final String URL = "jdbc:mysql://localhost:3306/notes?serverTimezone=UTC&useSSL=false";
-    private static final String USER_NAME = "root";
-    private static final String PASSWORD = "root";
+    private Connection conn = null;
+    private Statement st = null;
+    private ResultSet rs = null;
+    private final String URL = "jdbc:mysql://localhost:3306/notes?serverTimezone=UTC&useSSL=false";
+    private final String USER_NAME = "root";
+    private final String PASSWORD = "root";
 
 
     private ObservableList<Note> notes = FXCollections.observableArrayList();
@@ -43,7 +44,6 @@ public class DBNotesTable implements NotesTable {
     }
 
     public void getUpdateTable() {
-        ResultSet rs = null;
         try {
             conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
             st = conn.createStatement();
