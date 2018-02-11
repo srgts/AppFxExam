@@ -1,7 +1,7 @@
 package com.sample.objects;
 
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -9,33 +9,21 @@ import java.util.Date;
 
 public class Note {
 
-    private SimpleIntegerProperty number;
-    private Date date;
-    private SimpleStringProperty text = new SimpleStringProperty("");
+    private StringProperty date = new SimpleStringProperty("");
+    private StringProperty text = new SimpleStringProperty("");
+
+    private DateFormat df = new SimpleDateFormat("dd:MM:yyyy HH:mm:ss");
 
     public Note() {
     }
 
-    public Note(int number, Date date, String text) {
-        this.number = new SimpleIntegerProperty(number);
-        this.date = date;
+    public Note(Date date, String text) {
+        this.date = new SimpleStringProperty(df.format(date));
         this.text = new SimpleStringProperty(text);
     }
 
-    public int getNumber() {
-        return number.get();
-    }
-
-    public void setNumber(int number) {
-        this.number.set(number);
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
     public void setDate(Date date) {
-        this.date = date;
+        this.date = new SimpleStringProperty(df.format(date));
     }
 
     public String getText() {
@@ -46,16 +34,11 @@ public class Note {
         this.text.set(text);
     }
 
-    public SimpleIntegerProperty numberProperty(){
-        return number;
-    }
-
-    public SimpleStringProperty textProperty(){
+    public StringProperty textProperty(){
         return text;
     }
 
-    public SimpleStringProperty dateProperty(){
-        DateFormat df = new SimpleDateFormat("dd:MM:yyyy HH:mm:ss");
-        return new SimpleStringProperty(df.format(date));
+    public StringProperty dateProperty(){
+        return date;
     }
 }

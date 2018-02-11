@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sample.controllers.MainController">
     <children>
         <HBox maxHeight="50.0">
@@ -24,7 +21,6 @@
             <children>
                 <TableView fx:id="tableNotesTable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                        <TableColumn fx:id="columnNumber" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" text="Номер" />
                         <TableColumn fx:id="columnDate" maxWidth="140.0" minWidth="140.0" prefWidth="140.0" text="Дата создания" />
                         <TableColumn fx:id="columnText" prefWidth="370.0" text="Содержимое" />
                     </columns>

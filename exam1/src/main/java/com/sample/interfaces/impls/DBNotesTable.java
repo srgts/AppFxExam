@@ -22,7 +22,9 @@ public class DBNotesTable implements NotesTable {
         try {
             conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
             Statement st = conn.createStatement();
-            st.executeUpdate(String.format("INSERT INTO notes_table(number, createDate, noteText) VALUES (%s, CURTIME(), '%s')", note.getNumber(), note.getText()));
+            if (!note.getText().equals("")) {
+                st.executeUpdate(String.format("INSERT INTO notes_table(createDate, noteText) VALUES (CURTIME(), '%s')", note.getText()));
+            }
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
@@ -44,12 +46,13 @@ public class DBNotesTable implements NotesTable {
     }
 
     public void getUpdateTable() {
+        notes.clear();
         try {
             conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
             st = conn.createStatement();
-            rs = st.executeQuery("SELECT number, createDate, noteText FROM notes_table");
+            rs = st.executeQuery("SELECT createDate, noteText FROM notes_table");
             while (rs.next()) {
-                notes.add(new Note(rs.getInt("number"), rs.getDate("createDate"), rs.getString("noteText")));
+                notes.add(new Note(rs.getTimestamp("createDate"), rs.getString("noteText")));
             }
             rs.close();
             st.close();
