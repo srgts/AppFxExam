@@ -15,7 +15,6 @@ public class DBNotesTable implements NotesTable {
     private final String USER_NAME = "root";
     private final String PASSWORD = "root";
 
-
     private ObservableList<Note> notes = FXCollections.observableArrayList();
 
     public void add(Note note) {
@@ -47,40 +46,45 @@ public class DBNotesTable implements NotesTable {
 
     public void getUpdateTable() {
         notes.clear();
-        try {
-            conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
-            st = conn.createStatement();
-            rs = st.executeQuery("SELECT createDate, noteText FROM notes_table");
-            while (rs.next()) {
-                notes.add(new Note(rs.getTimestamp("createDate"), rs.getString("noteText")));
-            }
-            rs.close();
-            st.close();
-            conn.close();
-        } catch (SQLException ex) {
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
-        } finally {
-            if (rs != null) {
+        Thread t = new Thread(new Runnable() {
+            public void run() {
                 try {
+                    conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+                    st = conn.createStatement();
+                    rs = st.executeQuery("SELECT createDate, noteText FROM notes_table");
+                    while (rs.next()) {
+                        notes.add(new Note(rs.getTimestamp("createDate"), rs.getString("noteText")));
+                    }
                     rs.close();
-                } catch (SQLException sqlEx) {
-                }
-            }
-            if (st != null) {
-                try {
                     st.close();
-                } catch (SQLException sqlEx) {
-                }
-            }
-            if (conn != null) {
-                try {
                     conn.close();
-                } catch (SQLException sqlEx) {
+                } catch (SQLException ex) {
+                    System.out.println("SQLException: " + ex.getMessage());
+                    System.out.println("SQLState: " + ex.getSQLState());
+                    System.out.println("VendorError: " + ex.getErrorCode());
+                } finally {
+                    if (rs != null) {
+                        try {
+                            rs.close();
+                        } catch (SQLException sqlEx) {
+                        }
+                    }
+                    if (st != null) {
+                        try {
+                            st.close();
+                        } catch (SQLException sqlEx) {
+                        }
+                    }
+                    if (conn != null) {
+                        try {
+                            conn.close();
+                        } catch (SQLException sqlEx) {
+                        }
+                    }
                 }
             }
-        }
+        });
+        t.start();
     }
 
     public ObservableList<Note> getNotes() {

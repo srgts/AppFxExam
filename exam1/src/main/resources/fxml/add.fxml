@@ -10,7 +10,7 @@
             <AnchorPane prefHeight="468.0" prefWidth="158.0">
                <children>
                   <Label text="Дата и время:" AnchorPane.bottomAnchor="35.0" />
-                  <TextField editable="false" prefHeight="30.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" />
+                  <TextField fx:id="fldDate" editable="false" prefHeight="30.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" />
                   <Label text="Введите текст заметки:" AnchorPane.topAnchor="5.0" />
                </children>
             </AnchorPane>

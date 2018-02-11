@@ -16,6 +16,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static javafx.stage.Modality.WINDOW_MODAL;
 
@@ -69,6 +71,7 @@ public class MainController {
             addDialogStage.setScene(new Scene(fxmlAdd));
             addDialogStage.initModality(WINDOW_MODAL);
             addDialogStage.initOwner(mainStage);
+            clock();
             addTextLimiter(addDialogController.textArea, MAX_TEXT_LENGTH);
         }
         addDialogStage.showAndWait();
@@ -88,4 +91,21 @@ public class MainController {
         });
     }
 
+    private void clock() {
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                while (true) {
+                    Date d = new Date();
+                    addDialogController.fldDate.setText(new SimpleDateFormat("dd:MM:yyyy HH:mm:ss").format(d));
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
+        t.start();
+    }
 }
