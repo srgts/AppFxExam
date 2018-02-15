@@ -4,7 +4,6 @@ import com.sample.interfaces.impls.DBNotesTable;
 import com.sample.objects.Note;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -34,7 +33,7 @@ public class MainController {
     private Parent fxmlEdit;
     private FXMLLoader fxmlLoader = new FXMLLoader();
     private EditDialogController editDialogController;
-    private Stage aditDialogStage;
+    private Stage editDialogStage;
     private Stage mainStage;
 
     public void setMainStage(Stage mainStage) {
@@ -77,11 +76,11 @@ public class MainController {
         }
     }
 
-    private void initListeners(){
+    private void initListeners() {
         tableNotesTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if(event.getClickCount()==2){
+                if (event.getClickCount() == 2) {
                     editDialogController.setNote((Note) tableNotesTable.getSelectionModel().getSelectedItem());
                     showDialog();
                 }
@@ -141,19 +140,19 @@ public class MainController {
     }
 
     private void showDialog() {
-        if (aditDialogStage == null) {
-            aditDialogStage = new Stage();
-            aditDialogStage.setTitle("Редактирование записи");
-            aditDialogStage.setHeight(400);
-            aditDialogStage.setWidth(600);
-            aditDialogStage.setResizable(false);
-            aditDialogStage.setScene(new Scene(fxmlEdit));
-            aditDialogStage.initModality(WINDOW_MODAL);
-            aditDialogStage.initOwner(mainStage);
+        if (editDialogStage == null) {
+            editDialogStage = new Stage();
+            editDialogStage.setTitle("Редактирование записи");
+            editDialogStage.setHeight(400);
+            editDialogStage.setWidth(600);
+            editDialogStage.setResizable(false);
+            editDialogStage.setScene(new Scene(fxmlEdit));
+            editDialogStage.initModality(WINDOW_MODAL);
+            editDialogStage.initOwner(mainStage);
             clock();
             addTextLimiter(editDialogController.textArea, MAX_TEXT_LENGTH);
         }
-        aditDialogStage.showAndWait();
+        editDialogStage.showAndWait();
     }
 
     private void addTextLimiter(final TextArea ta, final int maxLength) {

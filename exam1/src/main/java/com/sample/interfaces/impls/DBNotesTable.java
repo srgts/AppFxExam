@@ -46,11 +46,11 @@ public class DBNotesTable implements NotesTable {
     }
 
     @Override
-    public void edit(Note note, String oldValue) {
+    public void edit(Note note, String startTextValue) {
         try {
             conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
             Statement st = conn.createStatement();
-            st.executeUpdate(String.format("UPDATE notes_table SET createDate = CURTIME(), noteText = '%s' WHERE noteText = '%s'", note.getText(), oldValue));
+            st.executeUpdate(String.format("UPDATE notes_table SET createDate = CURTIME(), noteText = '%s' WHERE noteText = '%s'", note.getText(), startTextValue));
         } catch (SQLException ex) {
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());

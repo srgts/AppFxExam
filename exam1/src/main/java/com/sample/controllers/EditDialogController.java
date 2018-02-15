@@ -15,22 +15,22 @@ public class EditDialogController {
     @FXML
     TextArea textArea;
 
-    private String oldValue;
+    private String startTextValue;
 
     private Note note;
 
     void setNote(Note note) {
         this.note = note;
-        textArea.setText(note.getText());
-        oldValue = note.getText();
+        startTextValue = note.getText();
+        textArea.setText(startTextValue);
     }
 
     Note getNote() {
         return note;
     }
 
-    String getOldValue() {
-        return oldValue;
+    String getStartTextValue() {
+        return startTextValue;
     }
 
     public void actionClose(ActionEvent actionEvent) {
