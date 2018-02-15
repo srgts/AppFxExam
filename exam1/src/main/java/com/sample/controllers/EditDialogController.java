@@ -8,17 +8,21 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class AddDialogController {
+public class EditDialogController {
 
     @FXML
     TextField fldDate;
     @FXML
     TextArea textArea;
 
+    String oldValue;
+
     private Note note;
 
     void setNote(Note note){
         this.note = note;
+        textArea.setText(note.getText());
+        oldValue = note.getText();
     }
 
     Note getNote(){

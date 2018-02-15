@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -27,15 +28,22 @@ public class MainController {
 
     private DBNotesTable db = new DBNotesTable();
 
-    private Parent fxmlAdd;
+    private Parent fxmlEdit;
     private FXMLLoader fxmlLoader = new FXMLLoader();
-    private AddDialogController addDialogController;
-    private Stage addDialogStage;
+    private EditDialogController editDialogController;
+    private Stage aditDialogStage;
     private Stage mainStage;
 
     public void setMainStage(Stage mainStage) {
         this.mainStage = mainStage;
     }
+
+    @FXML
+    private Button btnAdd;
+    @FXML
+    private Button btnEdit;
+    @FXML
+    private Button btnDelete;
 
     @FXML
     private TableView tableNotesTable;
@@ -53,31 +61,73 @@ public class MainController {
 
         try {
             fxmlLoader.setLocation(getClass().getResource("/fxml/add.fxml"));
-            fxmlAdd = fxmlLoader.load();
-            addDialogController = fxmlLoader.getController();
+            fxmlEdit = fxmlLoader.load();
+            editDialogController = fxmlLoader.getController();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void showDialog(ActionEvent actionEvent) {
-        if (addDialogStage == null) {
-            addDialogController.setNote(new Note());
-            addDialogStage = new Stage();
-            addDialogStage.setTitle("Добавление заметки");
-            addDialogStage.setHeight(400);
-            addDialogStage.setWidth(600);
-            addDialogStage.setResizable(false);
-            addDialogStage.setScene(new Scene(fxmlAdd));
-            addDialogStage.initModality(WINDOW_MODAL);
-            addDialogStage.initOwner(mainStage);
-            clock();
-            addTextLimiter(addDialogController.textArea, MAX_TEXT_LENGTH);
+    public void actionButtonPressed(ActionEvent actionEvent) {
+
+        Object source = actionEvent.getSource();
+        if (!(source instanceof Button)) {
+            return;
         }
-        addDialogStage.showAndWait();
-        db.add(addDialogController.getNote());
-        db.getUpdateTable();
-        addDialogController.clearNote();
+        Button clickedButton = (Button) source;
+
+        switch (clickedButton.getId()) {
+            case "btnAdd":
+                editDialogController.setNote(new Note());
+                showDialog();
+                Thread tr = new Thread(new Runnable() {
+                    public void run() {
+                        db.add(editDialogController.getNote());
+                        db.getUpdateTable();
+                        editDialogController.clearNote();
+                    }
+                });
+                tr.start();
+                break;
+            case "btnEdit":
+                editDialogController.setNote((Note) tableNotesTable.getSelectionModel().getSelectedItem());
+                showDialog();
+                Thread th = new Thread(new Runnable() {
+                    public void run() {
+                        db.edit(editDialogController.getNote(), editDialogController.oldValue);
+                        db.getUpdateTable();
+                        editDialogController.clearNote();
+                    }
+                });
+                th.start();
+                break;
+            case "btnDelete":
+                editDialogController.setNote((Note) tableNotesTable.getSelectionModel().getSelectedItem());
+                Thread t = new Thread(new Runnable() {
+                    public void run() {
+                        db.delete(editDialogController.getNote());
+                        db.getUpdateTable();
+                    }
+                });
+                t.start();
+                break;
+        }
+    }
+
+    private void showDialog() {
+        if (aditDialogStage == null) {
+            aditDialogStage = new Stage();
+            aditDialogStage.setTitle("Редактирование записи");
+            aditDialogStage.setHeight(400);
+            aditDialogStage.setWidth(600);
+            aditDialogStage.setResizable(false);
+            aditDialogStage.setScene(new Scene(fxmlEdit));
+            aditDialogStage.initModality(WINDOW_MODAL);
+            aditDialogStage.initOwner(mainStage);
+            clock();
+            addTextLimiter(editDialogController.textArea, MAX_TEXT_LENGTH);
+        }
+        aditDialogStage.showAndWait();
     }
 
     private void addTextLimiter(final TextArea ta, final int maxLength) {
@@ -96,7 +146,7 @@ public class MainController {
             public void run() {
                 while (true) {
                     Date d = new Date();
-                    addDialogController.fldDate.setText(new SimpleDateFormat("dd:MM:yyyy HH:mm:ss").format(d));
+                    editDialogController.fldDate.setText(new SimpleDateFormat("dd:MM:yyyy HH:mm:ss").format(d));
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {

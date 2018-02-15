@@ -6,4 +6,8 @@ public interface NotesTable {
 
     void add(Note note);
 
+    void edit(Note note, String oldValue);
+
+    void delete (Note note);
+
 }

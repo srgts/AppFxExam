@@ -17,6 +17,7 @@ public class DBNotesTable implements NotesTable {
 
     private ObservableList<Note> notes = FXCollections.observableArrayList();
 
+    @Override
     public void add(Note note) {
         try {
             conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
@@ -44,47 +45,94 @@ public class DBNotesTable implements NotesTable {
         }
     }
 
-    public void getUpdateTable() {
-        notes.clear();
-        Thread t = new Thread(new Runnable() {
-            public void run() {
+    @Override
+    public void edit(Note note, String oldValue) {
+        try {
+            conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+            Statement st = conn.createStatement();
+            st.executeUpdate(String.format("UPDATE notes_table SET createDate = CURTIME(), noteText = '%s' WHERE noteText = '%s'", note.getText(), oldValue));
+        } catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        } finally {
+            if (st != null) {
                 try {
-                    conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
-                    st = conn.createStatement();
-                    rs = st.executeQuery("SELECT createDate, noteText FROM notes_table");
-                    while (rs.next()) {
-                        notes.add(new Note(rs.getTimestamp("createDate"), rs.getString("noteText")));
-                    }
-                    rs.close();
                     st.close();
-                    conn.close();
-                } catch (SQLException ex) {
-                    System.out.println("SQLException: " + ex.getMessage());
-                    System.out.println("SQLState: " + ex.getSQLState());
-                    System.out.println("VendorError: " + ex.getErrorCode());
-                } finally {
-                    if (rs != null) {
-                        try {
-                            rs.close();
-                        } catch (SQLException sqlEx) {
-                        }
-                    }
-                    if (st != null) {
-                        try {
-                            st.close();
-                        } catch (SQLException sqlEx) {
-                        }
-                    }
-                    if (conn != null) {
-                        try {
-                            conn.close();
-                        } catch (SQLException sqlEx) {
-                        }
-                    }
+                } catch (SQLException sqlEx) {
                 }
             }
-        });
-        t.start();
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+        }
+    }
+
+    @Override
+    public void delete(Note note) {
+        try {
+            conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+            Statement st = conn.createStatement();
+            st.executeUpdate(String.format("DELETE FROM notes_table WHERE noteText = '%s'", note.getText()));
+        } catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        } finally {
+            if (st != null) {
+                try {
+                    st.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+        }
+    }
+
+    public void getUpdateTable() {
+        notes.clear();
+        try {
+            conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+            st = conn.createStatement();
+            rs = st.executeQuery("SELECT createDate, noteText FROM notes_table");
+            while (rs.next()) {
+                notes.add(new Note(rs.getTimestamp("createDate"), rs.getString("noteText")));
+            }
+            rs.close();
+            st.close();
+            conn.close();
+        } catch (SQLException ex) {
+            System.out.println("SQLException: " + ex.getMessage());
+            System.out.println("SQLState: " + ex.getSQLState());
+            System.out.println("VendorError: " + ex.getErrorCode());
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+            if (st != null) {
+                try {
+                    st.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException sqlEx) {
+                }
+            }
+        }
     }
 
     public ObservableList<Note> getNotes() {
