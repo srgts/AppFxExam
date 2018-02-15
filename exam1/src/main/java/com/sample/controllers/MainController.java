@@ -56,7 +56,12 @@ public class MainController {
     private void initialize() {
         columnDate.setCellValueFactory(new PropertyValueFactory<Note, String>("date"));
         columnText.setCellValueFactory(new PropertyValueFactory<Note, String>("text"));
-        db.getUpdateTable();
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                db.getUpdateTable();
+            }
+        });
+        t.start();
         tableNotesTable.setItems(db.getNotes());
 
         try {
@@ -75,6 +80,7 @@ public class MainController {
             return;
         }
         Button clickedButton = (Button) source;
+        Note selectedNote = (Note) tableNotesTable.getSelectionModel().getSelectedItem();
 
         switch (clickedButton.getId()) {
             case "btnAdd":
@@ -89,27 +95,31 @@ public class MainController {
                 tr.start();
                 break;
             case "btnEdit":
-                editDialogController.setNote((Note) tableNotesTable.getSelectionModel().getSelectedItem());
-                showDialog();
-                if (!editDialogController.getOldValue().equals(editDialogController.getNote().getText())) {
-                    Thread th = new Thread(new Runnable() {
-                        public void run() {
-                            db.edit(editDialogController.getNote(), editDialogController.getOldValue());
-                            db.getUpdateTable();
-                        }
-                    });
-                    th.start();
+                if (selectedNote != null) {
+                    editDialogController.setNote(selectedNote);
+                    showDialog();
+                    if (!editDialogController.getOldValue().equals(editDialogController.getNote().getText())) {
+                        Thread th = new Thread(new Runnable() {
+                            public void run() {
+                                db.edit(editDialogController.getNote(), editDialogController.getOldValue());
+                                db.getUpdateTable();
+                            }
+                        });
+                        th.start();
+                    }
                 }
                 break;
             case "btnDelete":
-                editDialogController.setNote((Note) tableNotesTable.getSelectionModel().getSelectedItem());
-                Thread t = new Thread(new Runnable() {
-                    public void run() {
-                        db.delete(editDialogController.getNote());
-                        db.getUpdateTable();
-                    }
-                });
-                t.start();
+                if (selectedNote != null) {
+                    editDialogController.setNote((Note) tableNotesTable.getSelectionModel().getSelectedItem());
+                    Thread t = new Thread(new Runnable() {
+                        public void run() {
+                            db.delete(editDialogController.getNote());
+                            db.getUpdateTable();
+                        }
+                    });
+                    t.start();
+                }
                 break;
         }
     }
