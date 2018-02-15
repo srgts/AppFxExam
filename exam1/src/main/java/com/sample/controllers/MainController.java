@@ -4,7 +4,9 @@ import com.sample.interfaces.impls.DBNotesTable;
 import com.sample.objects.Note;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,6 +16,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -56,6 +59,7 @@ public class MainController {
     private void initialize() {
         columnDate.setCellValueFactory(new PropertyValueFactory<Note, String>("date"));
         columnText.setCellValueFactory(new PropertyValueFactory<Note, String>("text"));
+        initListeners();
         Thread t = new Thread(new Runnable() {
             public void run() {
                 db.getUpdateTable();
@@ -71,6 +75,18 @@ public class MainController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void initListeners(){
+        tableNotesTable.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(event.getClickCount()==2){
+                    editDialogController.setNote((Note) tableNotesTable.getSelectionModel().getSelectedItem());
+                    showDialog();
+                }
+            }
+        });
     }
 
     public void actionButtonPressed(ActionEvent actionEvent) {
@@ -98,10 +114,10 @@ public class MainController {
                 if (selectedNote != null) {
                     editDialogController.setNote(selectedNote);
                     showDialog();
-                    if (!editDialogController.getOldValue().equals(editDialogController.getNote().getText())) {
+                    if (!editDialogController.getStartTextValue().equals(editDialogController.getNote().getText())) {
                         Thread th = new Thread(new Runnable() {
                             public void run() {
-                                db.edit(editDialogController.getNote(), editDialogController.getOldValue());
+                                db.edit(editDialogController.getNote(), editDialogController.getStartTextValue());
                                 db.getUpdateTable();
                             }
                         });
