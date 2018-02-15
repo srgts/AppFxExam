@@ -84,7 +84,6 @@ public class MainController {
                     public void run() {
                         db.add(editDialogController.getNote());
                         db.getUpdateTable();
-                        editDialogController.clearNote();
                     }
                 });
                 tr.start();
@@ -92,14 +91,15 @@ public class MainController {
             case "btnEdit":
                 editDialogController.setNote((Note) tableNotesTable.getSelectionModel().getSelectedItem());
                 showDialog();
-                Thread th = new Thread(new Runnable() {
-                    public void run() {
-                        db.edit(editDialogController.getNote(), editDialogController.oldValue);
-                        db.getUpdateTable();
-                        editDialogController.clearNote();
-                    }
-                });
-                th.start();
+                if (!editDialogController.getOldValue().equals(editDialogController.getNote().getText())) {
+                    Thread th = new Thread(new Runnable() {
+                        public void run() {
+                            db.edit(editDialogController.getNote(), editDialogController.getOldValue());
+                            db.getUpdateTable();
+                        }
+                    });
+                    th.start();
+                }
                 break;
             case "btnDelete":
                 editDialogController.setNote((Note) tableNotesTable.getSelectionModel().getSelectedItem());
