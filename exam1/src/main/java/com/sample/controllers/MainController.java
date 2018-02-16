@@ -48,7 +48,7 @@ public class MainController {
     private Button btnDelete;
 
     @FXML
-    private TableView tableNotesTable;
+    private TableView<Note> tableNotesTable;
     @FXML
     private TableColumn<Note, String> columnDate;
     @FXML
